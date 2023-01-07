@@ -37,3 +37,9 @@ COPY kafka-clients-3.3.1.jar /opt/bitnami/keycloak/providers/kafka-clients-3.3.1
 ```
 
 For more information on how to do this, see the Keycloak documentation here: https://www.keycloak.org/server/configuration-provider
+
+### Configure It
+
+This provider requires the following settings:
+* `kafka-topic` - the name of the Kafka topic to publish Keycloak events to
+* `kafka-url` - the Kafka `bootstrap-server` url.  Example: `localhost:9092`

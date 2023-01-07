@@ -3,6 +3,7 @@ package com.markstickel.keycloak.kafka;
 import com.markstickel.keycloak.kafka.user.UserEventPublisher;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import org.jboss.logging.Logger;
 import org.keycloak.Config.Scope;
 import org.keycloak.events.EventListenerProviderFactory;
@@ -24,7 +25,9 @@ public class KafkaPublisherEventListenerProviderFactory implements EventListener
 
     @Override
     public void init(Scope scope) {
-        userEventPublisher = new UserEventPublisher();
+        String topic = Optional.ofNullable(scope.get("topic")).orElse("keycloak");
+        String kafkaBootstrapUrl = Optional.ofNullable(scope.get("kafka-bootstrap-url")).orElse("localhost:9092");
+        userEventPublisher = new UserEventPublisher(kafkaBootstrapUrl, topic);
     }
 
     @Override
@@ -44,6 +47,7 @@ public class KafkaPublisherEventListenerProviderFactory implements EventListener
 
     @Override
     public Map<String, String> getOperationalInfo() {
-        return new HashMap<>();
+        Map<String, String> opInfo = new HashMap<>();
+        return opInfo;
     }
 }
