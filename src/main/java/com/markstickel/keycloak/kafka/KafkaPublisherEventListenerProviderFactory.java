@@ -18,6 +18,9 @@ public class KafkaPublisherEventListenerProviderFactory implements EventListener
 
     private UserEventPublisher userEventPublisher;
 
+    private String kafkaBootstrapUrl;
+    private String topic;
+
     @Override
     public KafkaPublisherEventListenerProvider create(KeycloakSession session) {
         return new KafkaPublisherEventListenerProvider(userEventPublisher, session);
@@ -25,8 +28,8 @@ public class KafkaPublisherEventListenerProviderFactory implements EventListener
 
     @Override
     public void init(Scope scope) {
-        String topic = Optional.ofNullable(scope.get("topic")).orElse("keycloak");
-        String kafkaBootstrapUrl = Optional.ofNullable(scope.get("kafka-bootstrap-url")).orElse("localhost:9092");
+        this.topic = Optional.ofNullable(scope.get("topic")).orElse("keycloak");
+        this.kafkaBootstrapUrl = Optional.ofNullable(scope.get("kafka-bootstrap-url")).orElse("localhost:9092");
         userEventPublisher = new UserEventPublisher(kafkaBootstrapUrl, topic);
     }
 
@@ -48,6 +51,8 @@ public class KafkaPublisherEventListenerProviderFactory implements EventListener
     @Override
     public Map<String, String> getOperationalInfo() {
         Map<String, String> opInfo = new HashMap<>();
+        opInfo.put("kafkaBootstrapUrl", this.kafkaBootstrapUrl);
+        opInfo.put("topic", this.topic);
         return opInfo;
     }
 }
