@@ -1,7 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-keycloak-kafka-publisher-event-listener-provider,com.markstickel.keycloak.kafka,KafkaPublisherEventListenerProvider,8,56,1,1,4,15,3,3,2,3
-keycloak-kafka-publisher-event-listener-provider,com.markstickel.keycloak.kafka,KafkaPublisherEventListenerProviderFactory,34,0,0,0,11,0,8,0,8,0
-keycloak-kafka-publisher-event-listener-provider,com.markstickel.keycloak.kafka.user,KeycloakUser,50,0,0,0,17,0,12,0,12,0
-keycloak-kafka-publisher-event-listener-provider,com.markstickel.keycloak.kafka.user,UserModelSerializer,45,0,0,0,12,0,2,0,2,0
-keycloak-kafka-publisher-event-listener-provider,com.markstickel.keycloak.kafka.user,UserEvent,6,11,0,0,2,5,2,3,2,3
-keycloak-kafka-publisher-event-listener-provider,com.markstickel.keycloak.kafka.user,UserEventPublisher,76,4,0,0,22,1,4,1,4,1

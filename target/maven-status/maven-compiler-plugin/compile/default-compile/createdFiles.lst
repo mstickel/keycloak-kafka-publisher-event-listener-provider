@@ -1,6 +1,0 @@
-com/markstickel/keycloak/kafka/KafkaPublisherEventListenerProviderFactory.class
-com/markstickel/keycloak/kafka/user/KeycloakUser.class
-com/markstickel/keycloak/kafka/user/UserEvent.class
-com/markstickel/keycloak/kafka/user/UserEventPublisher.class
-com/markstickel/keycloak/kafka/user/UserModelSerializer.class
-com/markstickel/keycloak/kafka/KafkaPublisherEventListenerProvider.class
