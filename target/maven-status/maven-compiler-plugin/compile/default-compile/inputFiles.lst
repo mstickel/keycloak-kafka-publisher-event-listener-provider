@@ -1,0 +1,6 @@
+/Users/mstickel/ssdev/keycloak-kafka-publisher-event-listener-provider/src/main/java/com/markstickel/keycloak/kafka/user/UserEvent.java
+/Users/mstickel/ssdev/keycloak-kafka-publisher-event-listener-provider/src/main/java/com/markstickel/keycloak/kafka/KafkaPublisherEventListenerProviderFactory.java
+/Users/mstickel/ssdev/keycloak-kafka-publisher-event-listener-provider/src/main/java/com/markstickel/keycloak/kafka/user/UserEventPublisher.java
+/Users/mstickel/ssdev/keycloak-kafka-publisher-event-listener-provider/src/main/java/com/markstickel/keycloak/kafka/user/UserModelSerializer.java
+/Users/mstickel/ssdev/keycloak-kafka-publisher-event-listener-provider/src/main/java/com/markstickel/keycloak/kafka/KafkaPublisherEventListenerProvider.java
+/Users/mstickel/ssdev/keycloak-kafka-publisher-event-listener-provider/src/main/java/com/markstickel/keycloak/kafka/user/KeycloakUser.java

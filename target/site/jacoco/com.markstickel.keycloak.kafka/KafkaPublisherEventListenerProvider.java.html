@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KafkaPublisherEventListenerProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">keycloak-kafka-publisher-event-listener-provider</a> &gt; <a href="index.source.html" class="el_package">com.markstickel.keycloak.kafka</a> &gt; <span class="el_source">KafkaPublisherEventListenerProvider.java</span></div><h1>KafkaPublisherEventListenerProvider.java</h1><pre class="source lang-java linenums">package com.markstickel.keycloak.kafka;
+
+import com.markstickel.keycloak.kafka.user.UserEvent;
+import com.markstickel.keycloak.kafka.user.UserEventPublisher;
+import java.util.concurrent.ExecutionException;
+import org.jboss.logging.Logger;
+import org.keycloak.events.Event;
+import org.keycloak.events.EventListenerProvider;
+import org.keycloak.events.EventType;
+import org.keycloak.events.admin.AdminEvent;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
+import org.keycloak.models.UserProvider;
+
+public class KafkaPublisherEventListenerProvider
+        implements EventListenerProvider {
+
+<span class="fc" id="L19">    private static final Logger logger = Logger.getLogger(KafkaPublisherEventListenerProvider.class);</span>
+
+    private final UserEventPublisher kafkaPublisher;
+
+    private final UserProvider userProvider;
+
+    private final RealmModel realmModel;
+
+<span class="fc" id="L27">    public KafkaPublisherEventListenerProvider(UserEventPublisher kafkaPublisher, KeycloakSession session) {</span>
+<span class="fc" id="L28">        this.kafkaPublisher = kafkaPublisher;</span>
+<span class="fc" id="L29">        this.userProvider = session.getProvider(UserProvider.class);</span>
+<span class="fc" id="L30">        this.realmModel = session.getContext().getRealm();</span>
+<span class="fc" id="L31">    }</span>
+
+    @Override
+    public void onEvent(Event event) {
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (EventType.REGISTER.equals(event.getType())) {</span>
+<span class="fc" id="L36">            UserModel userModel = userProvider.getUserById(realmModel, event.getUserId());</span>
+<span class="fc" id="L37">            logger.debug(&quot;A new user registered: &quot; + userModel.getEmail());</span>
+<span class="fc" id="L38">            UserEvent userEvent = new UserEvent();</span>
+<span class="fc" id="L39">            userEvent.setId(event.getId());</span>
+<span class="fc" id="L40">            userEvent.setModel(userModel);</span>
+            try {
+<span class="fc" id="L42">                kafkaPublisher.publishCreate(userEvent);</span>
+<span class="nc" id="L43">            } catch (ExecutionException | InterruptedException e) {</span>
+<span class="nc" id="L44">                logger.error(e.getMessage(), e);</span>
+<span class="fc" id="L45">            }</span>
+        }
+<span class="fc" id="L47">    }</span>
+
+    @Override
+    public void onEvent(AdminEvent event, boolean b) {
+<span class="nc" id="L51">    }</span>
+
+    @Override
+    public void close() {
+<span class="nc" id="L55">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
