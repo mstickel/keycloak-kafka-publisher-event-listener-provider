@@ -15,6 +15,8 @@ public class KafkaPublisherEventListenerProviderFactory implements EventListener
                                                                    ServerInfoAwareProviderFactory {
 
     private static final Logger logger = Logger.getLogger(KafkaPublisherEventListenerProviderFactory.class);
+    private static final String KAFKA_TOPIC = "KAFKA_TOPIC";
+    private static final String KAFKA_BOOTSTRAP_SERVER = "KAFKA_BOOTSTRAP_SERVER";
 
     private UserEventPublisher userEventPublisher;
 
@@ -28,8 +30,9 @@ public class KafkaPublisherEventListenerProviderFactory implements EventListener
 
     @Override
     public void init(Scope scope) {
-        this.topic = Optional.ofNullable(scope.get("topic")).orElse("keycloak");
-        this.kafkaBootstrapUrl = Optional.ofNullable(scope.get("kafka-bootstrap-url")).orElse("localhost:9092");
+        this.topic = Optional.ofNullable(System.getenv(KAFKA_TOPIC)).orElse("abcd");
+        this.kafkaBootstrapUrl = Optional.ofNullable(System.getenv(KAFKA_BOOTSTRAP_SERVER)).orElse("popfizzclink:9092");
+        logger.info("Initiating Kafka publisher. Bootstrap URL is " + kafkaBootstrapUrl + "; topic to publish on is " + topic);
         userEventPublisher = new UserEventPublisher(kafkaBootstrapUrl, topic);
     }
 
