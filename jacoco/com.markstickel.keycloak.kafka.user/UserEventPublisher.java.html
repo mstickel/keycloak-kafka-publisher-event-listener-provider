@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserEventPublisher.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">keycloak-kafka-publisher-event-listener-provider</a> &gt; <a href="index.source.html" class="el_package">com.markstickel.keycloak.kafka.user</a> &gt; <span class="el_source">UserEventPublisher.java</span></div><h1>UserEventPublisher.java</h1><pre class="source lang-java linenums">package com.markstickel.keycloak.kafka.user;
+
+import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.jboss.logging.Logger;
+import org.keycloak.models.UserModel;
+
+public class UserEventPublisher {
+
+<span class="fc" id="L15">    private static final Logger logger = Logger.getLogger(UserEventPublisher.class);</span>
+
+    private final Producer producer;
+    private final String topic;
+
+<span class="nc" id="L20">    public UserEventPublisher(String kafkaBootstrapUrl, String topic) {</span>
+<span class="nc" id="L21">        this.producer = createProducer(kafkaBootstrapUrl);</span>
+<span class="nc" id="L22">        this.topic = topic;</span>
+<span class="nc" id="L23">    }</span>
+
+    public void publishCreate(UserEvent object) throws ExecutionException, InterruptedException {
+<span class="nc" id="L26">        logger.warn(&quot;Publishing user event on Kafka: &quot; + object.getModel());</span>
+<span class="nc" id="L27">        ProducerRecord&lt;String, UserModel&gt; record = new ProducerRecord&lt;&gt;(topic, object.getId(), object.getModel());</span>
+<span class="nc" id="L28">        producer.send(record).get();</span>
+<span class="nc" id="L29">        producer.flush();</span>
+<span class="nc" id="L30">        logger.warn(&quot;Event was published&quot;);</span>
+<span class="nc" id="L31">    }</span>
+
+    public void close() {
+<span class="nc" id="L34">        producer.flush();</span>
+<span class="nc" id="L35">        producer.close();</span>
+<span class="nc" id="L36">    }</span>
+
+    private Producer&lt;String, UserModel&gt; createProducer(String kafkaBootstrapUrl) {
+<span class="nc" id="L39">        Properties props = new Properties();</span>
+<span class="nc" id="L40">        logger.info(&quot;Setting property &quot; + ProducerConfig.BOOTSTRAP_SERVERS_CONFIG + &quot;: &quot; + kafkaBootstrapUrl);</span>
+<span class="nc" id="L41">        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,</span>
+                  kafkaBootstrapUrl);
+<span class="nc" id="L43">        props.put(ProducerConfig.CLIENT_ID_CONFIG, &quot;UserProducer&quot;);</span>
+<span class="nc" id="L44">        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,</span>
+<span class="nc" id="L45">                  StringSerializer.class.getName());</span>
+<span class="nc" id="L46">        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,</span>
+<span class="nc" id="L47">                  UserModelSerializer.class.getName());</span>
+<span class="nc" id="L48">        KafkaProducer&lt;String, UserModel&gt; producer = new KafkaProducer&lt;&gt;(props);</span>
+<span class="nc" id="L49">        return producer;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

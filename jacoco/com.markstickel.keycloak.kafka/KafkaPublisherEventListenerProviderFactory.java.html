@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KafkaPublisherEventListenerProviderFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">keycloak-kafka-publisher-event-listener-provider</a> &gt; <a href="index.source.html" class="el_package">com.markstickel.keycloak.kafka</a> &gt; <span class="el_source">KafkaPublisherEventListenerProviderFactory.java</span></div><h1>KafkaPublisherEventListenerProviderFactory.java</h1><pre class="source lang-java linenums">package com.markstickel.keycloak.kafka;
+
+import com.markstickel.keycloak.kafka.user.UserEventPublisher;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import org.jboss.logging.Logger;
+import org.keycloak.Config.Scope;
+import org.keycloak.events.EventListenerProviderFactory;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.KeycloakSessionFactory;
+import org.keycloak.provider.ServerInfoAwareProviderFactory;
+
+<span class="nc" id="L14">public class KafkaPublisherEventListenerProviderFactory implements EventListenerProviderFactory,</span>
+                                                                   ServerInfoAwareProviderFactory {
+
+<span class="nc" id="L17">    private static final Logger logger = Logger.getLogger(KafkaPublisherEventListenerProviderFactory.class);</span>
+    private static final String KAFKA_TOPIC = &quot;KAFKA_TOPIC&quot;;
+    private static final String KAFKA_BOOTSTRAP_SERVER = &quot;KAFKA_BOOTSTRAP_SERVER&quot;;
+
+    private UserEventPublisher userEventPublisher;
+
+    private String kafkaBootstrapUrl;
+    private String topic;
+
+    @Override
+    public KafkaPublisherEventListenerProvider create(KeycloakSession session) {
+<span class="nc" id="L28">        return new KafkaPublisherEventListenerProvider(userEventPublisher, session);</span>
+    }
+
+    @Override
+    public void init(Scope scope) {
+<span class="nc" id="L33">        this.topic = Optional.ofNullable(System.getenv(KAFKA_TOPIC)).orElse(&quot;abcd&quot;);</span>
+<span class="nc" id="L34">        this.kafkaBootstrapUrl = Optional.ofNullable(System.getenv(KAFKA_BOOTSTRAP_SERVER)).orElse(&quot;popfizzclink:9092&quot;);</span>
+<span class="nc" id="L35">        logger.info(&quot;Initiating Kafka publisher. Bootstrap URL is &quot; + kafkaBootstrapUrl + &quot;; topic to publish on is &quot; + topic);</span>
+<span class="nc" id="L36">        userEventPublisher = new UserEventPublisher(kafkaBootstrapUrl, topic);</span>
+<span class="nc" id="L37">    }</span>
+
+    @Override
+    public void postInit(KeycloakSessionFactory keycloakSessionFactory) {
+<span class="nc" id="L41">        logger.info(&quot;factory postInit&quot;);</span>
+<span class="nc" id="L42">    }</span>
+
+    @Override
+    public void close() {
+<span class="nc" id="L46">        userEventPublisher.close();</span>
+<span class="nc" id="L47">    }</span>
+
+    @Override
+    public String getId() {
+<span class="nc" id="L51">        return &quot;kafka-event-publisher&quot;;</span>
+    }
+
+    @Override
+    public Map&lt;String, String&gt; getOperationalInfo() {
+<span class="nc" id="L56">        Map&lt;String, String&gt; opInfo = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L57">        opInfo.put(&quot;kafkaBootstrapUrl&quot;, this.kafkaBootstrapUrl);</span>
+<span class="nc" id="L58">        opInfo.put(&quot;topic&quot;, this.topic);</span>
+<span class="nc" id="L59">        return opInfo;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
