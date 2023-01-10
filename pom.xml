@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.markstickel.keycloak</groupId>
   <artifactId>keycloak-kafka-publisher-event-listener-provider</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.0-SNAPSHOT</version>
 
   <name>keycloak-kafka-publisher-event-listener-provider</name>
   <description>A Keycloak Provider that implements the Event Listener SPI and publishes events on a Kafka topic.</description>
