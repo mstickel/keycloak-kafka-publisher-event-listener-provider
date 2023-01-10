@@ -32,7 +32,6 @@
   <scm>
     <connection>scm:git:https://github.com/mstickel/keycloak-kafka-publisher-event-listener-provider.git</connection>
     <url>https://github.com/mstickel/keycloak-kafka-publisher-event-listener-provider</url>
-    <tag>keycloak-kafka-publisher-event-listener-provider-1.0.0</tag>
   </scm>
 
   <distributionManagement>
